@@ -14,4 +14,9 @@ int main() {
   auto ss2 = std::stringstream(text2);
   hash h2 = s.insert(ss2);
   printf("%s\n", h2.to_string().c_str());
+
+  if (h == h2) {
+    printf("Hashes are equal!");
+    return 1;
+  }
 }

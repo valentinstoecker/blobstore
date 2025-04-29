@@ -10,8 +10,4 @@ mkShell {
   inputsFrom = [
     (pkgs.callPackage ./build.nix { })
   ];
-
-  shellHook = ''
-    echo "Hello shell!"
-  '';
 }

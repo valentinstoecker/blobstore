@@ -1,57 +1,58 @@
 #include "blobstore/store.hpp"
 
 #include <openssl/evp.h>
+
+#include <format>
 #include <fstream>
 
 using namespace std;
 
 #define BUFSIZE 4096
 
-namespace blobstore
-{
-  store::store(const filesystem::path& path) {
-    root = filesystem::absolute(path);
-    filesystem::create_directories(root);
-  }
+namespace blobstore {
+store::store(const filesystem::path& path) {
+  root = filesystem::absolute(path);
+  filesystem::create_directories(root);
+}
 
-  hash store::insert(istream& dstream) {
-    auto tmp_dir = filesystem::temp_directory_path();
-    filesystem::create_directories(tmp_dir);
-    auto tmp_path = tmp_dir / "test";
-    auto file = ofstream(tmp_path, ios_base::out);
-    printf("tmp path: %s\n", tmp_path.c_str());
-    uint8_t buf[BUFSIZE];
+hash store::insert(istream& dstream) {
+  auto tmp_dir = filesystem::temp_directory_path();
+  filesystem::create_directories(tmp_dir);
+  unsigned int n = random();
+  auto tmp_path = tmp_dir / std::format("{}", n);
+  auto file = ofstream(tmp_path, ios_base::out);
+  uint8_t buf[BUFSIZE];
 
-    hash h;
+  hash h;
 
-    EVP_MD_CTX* ctx = EVP_MD_CTX_new();
-    if(!EVP_DigestInit(ctx, EVP_sha256())) {
-      printf("init failed");
+  EVP_MD_CTX* ctx = EVP_MD_CTX_new();
+  if (!EVP_DigestInit(ctx, EVP_sha256())) {
+    printf("init failed");
+    exit(1);
+  };
+
+  do {
+    dstream.read((char*)buf, BUFSIZE);
+    file.write((char*)buf, dstream.gcount());
+    if (!EVP_DigestUpdate(ctx, buf, dstream.gcount())) {
+      printf("update failed");
       exit(1);
     };
+  } while (0 < dstream.gcount());
 
-    do {
-      dstream.read((char*)buf, BUFSIZE);
-      file.write((char*)buf, dstream.gcount());
-      if (!EVP_DigestUpdate(ctx, buf, dstream.gcount())){
-        printf("update failed");
-        exit(1);
-      };
-    } while (0 < dstream.gcount());
-  
-    file.close();
+  file.close();
 
-    unsigned char* ptr = (unsigned char*)(&(h.data));
-  
-    if(!EVP_DigestFinal(ctx, ptr, NULL)) {
-      printf("final failed");
-      exit(1);
-    };
+  unsigned char* ptr = (unsigned char*)(&(h.data));
 
-    EVP_MD_CTX_free(ctx);
+  if (!EVP_DigestFinal(ctx, ptr, NULL)) {
+    printf("final failed");
+    exit(1);
+  };
 
-    filesystem::rename(tmp_dir / "test", root / h.to_string());
+  EVP_MD_CTX_free(ctx);
 
-    return h;
-  }
-} // namespace blobstore
+  filesystem::rename(tmp_path, root / h.to_string());
+
+  return h;
+}
+}  // namespace blobstore
