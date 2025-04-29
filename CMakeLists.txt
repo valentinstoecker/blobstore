@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.15)
 
 project(blobstore LANGUAGES CXX)
 
-
-
-include(CTest)
-
 file(GLOB SOURCES lib/*.cpp)
 file(GLOB HEADERS include/blobstore/*.hpp)
 
@@ -21,7 +17,9 @@ add_executable(blobstore-test ${TESTSRC})
 target_link_libraries(blobstore-test PRIVATE blobstore)
 #target_include_directories(blobstore-test PUBLIC include)
 
-add_test(NAME blobstore-test COMMAND blobstore-test)
+include(CTest)
+enable_testing()
+add_test(NAME blobstore COMMAND blobstore-test)
 
 install(TARGETS blobstore blobstore-test)
 install(FILES ${HEADERS} DESTINATION include)

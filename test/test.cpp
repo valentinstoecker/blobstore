@@ -32,4 +32,17 @@ int main() {
     printf("Hashes are equal!");
     return 1;
   }
+
+  std::string text3 = "data...\n";
+  auto ss3_l = std::stringstream(text3);
+  auto ss3_r = std::stringstream(text3);
+  hash l = s.insert(ss3_l);
+  hash r = s.insert(ss3_r);
+  printf("l = %s\n", l.to_string().c_str());
+  printf("r = %s\n", r.to_string().c_str());
+
+  if (!(l == r)) {
+    printf("Hash is impure!");
+    return 1;
+  }
 }

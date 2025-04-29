@@ -27,8 +27,10 @@ struct hasher {
   // delete copy constructor and assignment operator
   hasher(const hasher&) = delete;
   hasher& operator=(const hasher&) = delete;
-  // move constructor and assignment operator
-  hasher(hasher&& other) : ctx(other.ctx) { other.ctx = nullptr; }
+
+  // delete move constructor and assignment operator
+  hasher(hasher&&) = delete;
+  hasher& operator=(hasher&&) = delete;
 
   void init();
   void update(const char* data, size_t len);

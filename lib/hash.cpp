@@ -1,6 +1,7 @@
 #include "blobstore/hash.hpp"
 
 namespace blobstore {
+
 bool hash::operator==(hash& other) {
   for (size_t i = 0; i < sizeof(data); i++) {
     if (data[i] != other.data[i]) return false;
