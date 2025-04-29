@@ -7,7 +7,7 @@
 namespace blobstore {
   
 struct hash {
-  std::array<uint8_t, 64> data;
+  std::array<uint8_t, 32> data;
 };
 
 }  // namespace blobstore

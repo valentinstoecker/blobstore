@@ -17,6 +17,7 @@ stdenv.mkDerivation {
     fileset = fs.unions [
       ./include
       ./src
+      ./test
       ./CMakeLists.txt
     ];
   };

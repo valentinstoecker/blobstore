@@ -8,8 +8,8 @@ namespace blobstore {
 
 class store {
   std::filesystem::path root;
-
-  hash insert(std::ostream& dstream);
+public:
+  hash insert(std::istream& dstream);
 };
 
 }  // namespace blobstore
