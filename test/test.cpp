@@ -8,9 +8,10 @@ int main() {
   std::string text = "Hello!\n";
   auto ss = std::stringstream(text);
   hash h = s.insert(ss);
-  for (size_t i = 0; i < sizeof(hash::data); i++)
-  {
-    printf("%02x", h.data[i]);
-  }
-  
+  printf("%s\n", h.to_string().c_str());
+
+  std::string text2 = "Bye!\n";
+  auto ss2 = std::stringstream(text2);
+  hash h2 = s.insert(ss2);
+  printf("%s\n", h2.to_string().c_str());
 }

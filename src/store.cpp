@@ -12,8 +12,9 @@ namespace blobstore
   hash store::insert(istream& dstream) {
     auto tmp_dir = filesystem::temp_directory_path();
     filesystem::create_directories(tmp_dir);
-    auto file = ofstream(tmp_dir / "test", ios_base::out);
-    printf("tmp path: %s\n", tmp_dir.c_str());
+    auto tmp_path = tmp_dir / "test";
+    auto file = ofstream(tmp_path, ios_base::out);
+    printf("tmp path: %s\n", tmp_path.c_str());
     uint8_t buf[BUFSIZE];
 
     hash h;
@@ -43,6 +44,8 @@ namespace blobstore
     };
 
     EVP_MD_CTX_free(ctx);
+
+    filesystem::rename(tmp_dir / "test", tmp_dir / h.to_string());
 
     return h;
   }

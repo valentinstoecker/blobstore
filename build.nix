@@ -22,10 +22,13 @@ stdenv.mkDerivation {
     ];
   };
 
+  buildInputs = [
+    openssl
+  ];
+
   nativeBuildInputs = [
     cmake
     gcc
-    openssl
   ];
 
   doCheck = true;
