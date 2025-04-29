@@ -1,0 +1,29 @@
+{
+  stdenv,
+  cmake,
+  gcc,
+  lib,
+  openssl,
+}:
+let
+  fs = lib.fileset;
+in
+stdenv.mkDerivation {
+  pname = "blobstore";
+  version = "0.1.0";
+
+  src = fs.toSource {
+    root = ./.;
+    fileset = fs.unions [
+      ./include
+      ./src
+      ./CMakeLists.txt
+    ];
+  };
+
+  nativeBuildInputs = [
+    cmake
+    gcc
+    openssl
+  ];
+}
