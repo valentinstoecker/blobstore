@@ -13,13 +13,13 @@ add_compile_options(--std=c++20 -Wall -Werror)
 
 add_library(blobstore SHARED ${SOURCES})
 target_include_directories(blobstore PUBLIC include)
-target_link_libraries(blobstore PRIVATE ssl)
+target_link_libraries(blobstore PUBLIC ssl)
 
 file(GLOB TESTSRC test/*.cpp)
 
 add_executable(blobstore-test ${TESTSRC})
-target_link_libraries(blobstore-test blobstore)
-target_include_directories(blobstore-test PUBLIC include)
+target_link_libraries(blobstore-test PRIVATE blobstore)
+#target_include_directories(blobstore-test PUBLIC include)
 
 add_test(NAME blobstore-test COMMAND blobstore-test)
 

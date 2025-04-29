@@ -10,48 +10,40 @@ using namespace std;
 #define BUFSIZE 4096
 
 namespace blobstore {
-store::store(const filesystem::path& path) {
-  root = filesystem::absolute(path);
-  filesystem::create_directories(root);
+
+namespace fs = std::filesystem;
+
+fs::path temp_file() {
+  auto tmp_dir = fs::temp_directory_path();
+  fs::create_directories(tmp_dir);
+  long n = random();
+  return tmp_dir / format("{}", n);
 }
 
-hash store::insert(istream& dstream) {
-  auto tmp_dir = filesystem::temp_directory_path();
-  filesystem::create_directories(tmp_dir);
-  unsigned int n = random();
-  auto tmp_path = tmp_dir / std::format("{}", n);
-  auto file = ofstream(tmp_path, ios_base::out);
-  uint8_t buf[BUFSIZE];
+store::store(const fs::path& path) {
+  root = fs::absolute(path);
+  fs::create_directories(root);
+}
 
+hash store::insert(istream& in) {
+  char buf[BUFSIZE];
+  hasher ctx;
   hash h;
 
-  EVP_MD_CTX* ctx = EVP_MD_CTX_new();
-  if (!EVP_DigestInit(ctx, EVP_sha256())) {
-    printf("init failed");
-    exit(1);
-  };
+  fs::path tmp_path = temp_file();
+  ofstream out = ofstream(tmp_path, ios_base::out);
 
   do {
-    dstream.read((char*)buf, BUFSIZE);
-    file.write((char*)buf, dstream.gcount());
-    if (!EVP_DigestUpdate(ctx, buf, dstream.gcount())) {
-      printf("update failed");
-      exit(1);
-    };
-  } while (0 < dstream.gcount());
+    in.read(buf, BUFSIZE);
+    out.write(buf, in.gcount());
+    ctx.update(buf, in.gcount());
+  } while (0 < in.gcount());
 
-  file.close();
+  out.close();
 
-  unsigned char* ptr = (unsigned char*)(&(h.data));
+  h = ctx.finalize();
 
-  if (!EVP_DigestFinal(ctx, ptr, NULL)) {
-    printf("final failed");
-    exit(1);
-  };
-
-  EVP_MD_CTX_free(ctx);
-
-  filesystem::rename(tmp_path, root / h.to_string());
+  fs::rename(tmp_path, root / h.to_string());
 
   return h;
 }

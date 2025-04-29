@@ -1,4 +1,4 @@
-#include <blobstore/hash.hpp>
+#include "blobstore/hash.hpp"
 
 namespace blobstore {
 bool hash::operator==(hash& other) {
@@ -20,4 +20,41 @@ std::string hash::to_string() {
   }
   return out;
 }
+
+hasher::hasher() : ctx(nullptr) {}
+
+hasher::~hasher() {
+  if (ctx) {
+    EVP_MD_CTX_free(ctx);
+  }
+}
+
+void hasher::init() {
+  ctx = EVP_MD_CTX_new();
+  if (!EVP_DigestInit(ctx, EVP_sha256())) {
+    throw 1;
+  }
+}
+
+void hasher::update(const char* data, size_t len) {
+  if (!ctx) {
+    init();
+  }
+  if (!EVP_DigestUpdate(ctx, data, len)) {
+    throw 1;
+  }
+}
+
+hash hasher::finalize() {
+  if (!ctx) {
+    init();
+  }
+  hash h;
+  unsigned int len = 0;
+  if (!EVP_DigestFinal_ex(ctx, h.data.data(), &len)) {
+    throw 1;
+  }
+  return h;
+}
+
 }  // namespace blobstore

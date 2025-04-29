@@ -3,7 +3,20 @@
 
 using namespace blobstore;
 
+void empty_hash() {
+  hasher ctx;
+  hash h = ctx.finalize();
+  printf("%s\n", h.to_string().c_str());
+  if (h.to_string() !=
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855") {
+    printf("Hash is not empty!");
+    exit(1);
+  }
+}
+
 int main() {
+  empty_hash();
+
   store s = store(".bs");
   std::string text = "Hello!\n";
   auto ss = std::stringstream(text);
