@@ -4,7 +4,7 @@
 using namespace blobstore;
 
 int main() {
-  store s = store();
+  store s = store(".bs");
   std::string text = "Hello!\n";
   auto ss = std::stringstream(text);
   hash h = s.insert(ss);

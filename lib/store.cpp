@@ -9,6 +9,11 @@ using namespace std;
 
 namespace blobstore
 {
+  store::store(const filesystem::path& path) {
+    root = filesystem::absolute(path);
+    filesystem::create_directories(root);
+  }
+
   hash store::insert(istream& dstream) {
     auto tmp_dir = filesystem::temp_directory_path();
     filesystem::create_directories(tmp_dir);
@@ -45,7 +50,7 @@ namespace blobstore
 
     EVP_MD_CTX_free(ctx);
 
-    filesystem::rename(tmp_dir / "test", tmp_dir / h.to_string());
+    filesystem::rename(tmp_dir / "test", root / h.to_string());
 
     return h;
   }

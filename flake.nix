@@ -17,9 +17,11 @@
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        blobstore = pkgs.callPackage ./build.nix { };
       in
       {
-        packages.default = pkgs.callPackage ./build.nix { };
+        packages.default = blobstore;
+        packages.blobstore = blobstore;
         devShell = import ./shell.nix { inherit pkgs; };
       }
     ));

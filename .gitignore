@@ -1,6 +1,7 @@
-build/
+.bs
 .direnv/
 .vscode/
+build/
 
 result
 .envrc

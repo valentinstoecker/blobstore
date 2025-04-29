@@ -9,6 +9,8 @@ namespace blobstore {
 class store {
   std::filesystem::path root;
 public:
+  store(const std::filesystem::path& path);
+
   hash insert(std::istream& dstream);
 };
 

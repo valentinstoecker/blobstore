@@ -4,8 +4,10 @@ project(blobstore LANGUAGES CXX)
 
 include(CTest)
 
-file(GLOB SOURCES src/*.cpp)
+file(GLOB SOURCES lib/*.cpp)
 file(GLOB HEADERS include/blobstore/*.hpp)
+
+add_compile_options(-Wall -Werror)
 
 add_library(blobstore SHARED ${SOURCES})
 target_include_directories(blobstore PUBLIC include)
