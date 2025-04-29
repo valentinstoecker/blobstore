@@ -27,4 +27,6 @@ stdenv.mkDerivation {
     gcc
     openssl
   ];
+
+  doCheck = true;
 }
