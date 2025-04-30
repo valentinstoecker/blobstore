@@ -41,7 +41,7 @@ int main() {
   printf("l = %s\n", l.to_string().c_str());
   printf("r = %s\n", r.to_string().c_str());
 
-  if (!(l == r)) {
+  if (l != r) {
     printf("Hash is impure!");
     return 1;
   }

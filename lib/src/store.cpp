@@ -42,8 +42,11 @@ hash store::insert(istream& in) {
   out.close();
 
   h = ctx.finalize();
+  string h_str = h.to_string();
+  fs::path dir_name = root / h_str.substr(0, 2);
+  fs::create_directories(dir_name);
 
-  fs::rename(tmp_path, root / h.to_string());
+  fs::rename(tmp_path, dir_name / h_str.substr(2));
 
   return h;
 }
