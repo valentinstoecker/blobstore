@@ -22,7 +22,15 @@
       {
         packages.default = blobstore;
         packages.blobstore = blobstore;
-        devShell = import ./shell.nix { inherit pkgs; };
+        devShell = pkgs.mkShell {
+          buildInputs = [
+            pkgs.nixpkgs-fmt
+          ];
+
+          inputsFrom = [
+            blobstore
+          ];
+        };
       }
     ));
 }
