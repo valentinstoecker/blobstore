@@ -7,3 +7,5 @@ target_link_libraries(blobstore PUBLIC ssl)
 
 install(TARGETS blobstore)
 install(FILES ${HEADERS} DESTINATION include)
+
+add_subdirectory(test)
