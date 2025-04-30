@@ -15,7 +15,6 @@ stdenv.mkDerivation {
   src = fs.toSource {
     root = ./.;
     fileset = fs.unions [
-      ./include
       ./lib
       ./test
       ./CMakeLists.txt
