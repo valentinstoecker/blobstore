@@ -33,7 +33,7 @@
         };
 
         hydraJobs = {
-          blobstore = self.packages.x86_64-linux.packages.x86_64-linux.blobstore;
+          blobstore = self.x86_64-linux.packages.x86_64-linux.blobstore;
         };
       }
     ));
