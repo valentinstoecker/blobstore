@@ -4,6 +4,7 @@
   gcc,
   lib,
   openssl,
+  zlib,
 }:
 let
   fs = lib.fileset;
@@ -27,6 +28,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     gcc
+    zlib
   ];
 
   doCheck = true;

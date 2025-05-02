@@ -37,7 +37,7 @@ void hasher::init() {
   }
 }
 
-void hasher::update(const char* data, size_t len) {
+void hasher::write(const char* data, size_t len) {
   if (!ctx) {
     init();
   }

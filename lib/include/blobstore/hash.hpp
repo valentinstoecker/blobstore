@@ -33,7 +33,7 @@ struct hasher {
   hasher& operator=(hasher&&) = delete;
 
   void init();
-  void update(const char* data, size_t len);
+  void write(const char* data, size_t len);
   hash finalize();
 };
 

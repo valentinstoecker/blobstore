@@ -31,6 +31,10 @@
             blobstore
           ];
         };
+
+        hydraJobs = {
+          inherit (self) packages;
+        };
       }
     ));
 }
