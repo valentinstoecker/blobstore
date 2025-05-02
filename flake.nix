@@ -33,7 +33,7 @@
         };
 
         hydraJobs = {
-          inherit (self) packages;
+          blobstore = self.packages.x86_64-linux.packages.x86_64-linux.blobstore;
         };
       }
     ));
